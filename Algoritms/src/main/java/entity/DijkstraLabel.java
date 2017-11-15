@@ -21,6 +21,18 @@ public class DijkstraLabel {
                 '}';
     }
 
+    public int getVertex() {
+        return vertex;
+    }
+
+    public int getPreviousVertex() {
+        return previousVertex;
+    }
+
+    public int getShortestPathWeight() {
+        return shortestPathWeight;
+    }
+
     public void setShortestPathWeight(int shortestPathWeight) {
         this.shortestPathWeight = shortestPathWeight;
     }

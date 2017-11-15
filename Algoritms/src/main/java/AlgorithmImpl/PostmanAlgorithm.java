@@ -10,14 +10,12 @@ import java.util.stream.Collectors;
 
 public class PostmanAlgorithm {
 
-    private static final String PAIR_FORMAT = ;
-
     public static void main(String[] args) {
         List weightMatrix = null;
         Graph graph;
         try {
             weightMatrix = MatrixUtils
-                    .readMatrixFromFile("/home/andrii/IdeaProjects/KryvyiLabs/untitled/data/lab2_matrix_Eulers");
+                    .readMatrixFromFile("/home/andrii/IdeaProjects/KryvyiLabs/Algoritms/data/lab2_matrix_Eulers");
             graph = new Graph(weightMatrix);
             System.out.println(graph.toString());
 
@@ -50,7 +48,7 @@ public class PostmanAlgorithm {
 
         for (int i = 0; i < oddVertices.size(); i++) {
             for (int j = i; j < oddVertices.size(); j++) {
-                possibleVariantsWeights.put(new Edge(oddVertices.get(i), oddVertices.get(j), ))
+//                possibleVariantsWeights.put(new Edge(oddVertices.get(i), oddVertices.get(j), ))
             }
         }
 
@@ -58,7 +56,8 @@ public class PostmanAlgorithm {
     }
 
     private static List<Edge> findMinimumWeightPath(int startVertex, int endVertex, Graph graph){
-        
+        DijkstraImplementation.findMinimumPathBetween(startVertex, endVertex, graph);
+        return null;
     }
 
     private static String findPath(int startingVertex, Graph graph) {

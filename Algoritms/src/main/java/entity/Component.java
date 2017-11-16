@@ -1,16 +1,18 @@
 package entity;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 public class Component {
 
-    private Set<Edge> edges;
+    private List<Edge> edges;
     private Set<Integer> vertices;
 
     public Component(Set<Edge> edges) {
         this.vertices = new HashSet<>();
-        this.edges = new HashSet<>();
+        this.edges = new LinkedList<>();
 
         for (Edge edge: edges){
             this.addEdgeToComponent(edge);
@@ -18,7 +20,7 @@ public class Component {
     }
 
     public Component(int initVertex) {
-        this.edges = new HashSet<>();
+        this.edges = new LinkedList<>();
         this.vertices = new HashSet<>();
         this.vertices.add(initVertex);
     }
@@ -35,7 +37,7 @@ public class Component {
         return vertices;
     }
 
-    public Set<Edge> getEdges() {
+    public List<Edge> getEdges() {
         return edges;
     }
 

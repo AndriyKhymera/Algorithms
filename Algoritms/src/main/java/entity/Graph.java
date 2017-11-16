@@ -7,18 +7,18 @@ import java.util.*;
 public class Graph {
 
     private int vertexAmount;
-    private Set<Integer> vertices;
+    private List<Integer> vertices;
     private Map<Integer, Integer> vertexOrder;
-    private Set<Edge> edges;
+    private List<Edge> edges;
 
     public Graph(int vertexAmount) {
         this.vertexAmount = vertexAmount;
-        vertices = new HashSet<>();
-        edges = new HashSet<>();
+        vertices = new ArrayList<>();
+        edges = new LinkedList<>();
         vertexOrder = new HashMap<>();
     }
 
-    public Graph(Set<Integer> vertices, Set<Edge> edges) {
+    public Graph(List<Integer> vertices, List<Edge> edges) {
         this.vertexAmount = vertices.size();
         this.vertices = vertices;
         this.edges = edges;
@@ -54,6 +54,13 @@ public class Graph {
         }
     }
 
+    public Edge getEdge(int srcVertex, int destVertex) {
+        return edges.stream()
+                .filter(edge -> edge.getSrcVertex() == srcVertex && edge.getDestVertex() == destVertex)
+                .findFirst()
+                .get();
+    }
+
     @Override
     public String toString() {
         return "Graph{" +
@@ -72,11 +79,11 @@ public class Graph {
         edges.add(edge);
     }
 
-    public Set<Edge> getEdges() {
+    public List<Edge> getEdges() {
         return edges;
     }
 
-    public Set<Integer> getVertices() {
+    public List<Integer> getVertices() {
         return vertices;
     }
 

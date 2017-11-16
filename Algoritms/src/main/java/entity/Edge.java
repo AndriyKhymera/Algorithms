@@ -29,7 +29,7 @@ public class Edge {
         Edge edge = (Edge) o;
 
         if (weight != edge.weight) return false;
-        if (srcVertex == edge.destVertex && destVertex == edge.srcVertex) return true;
+//        if (srcVertex == edge.destVertex && destVertex == edge.srcVertex && oriented == false) return true;
         if (srcVertex != edge.srcVertex) return false;
         return destVertex == edge.destVertex;
     }

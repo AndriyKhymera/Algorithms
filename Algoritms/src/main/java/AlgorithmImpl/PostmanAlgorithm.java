@@ -3,7 +3,9 @@ package AlgorithmImpl;
 import Utils.MatrixUtils;
 import entity.Edge;
 import entity.Graph;
+import entity.Path;
 
+import java.io.CharArrayReader;
 import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -40,28 +42,78 @@ public class PostmanAlgorithm {
     private static Graph makeEulerian(Graph graph) {
         Graph eulerianGraph = new Graph(graph.getVertices(), graph.getEdges());
 
-        List<Integer> oddVertices = graph.getVertices().stream()
-                .filter(vertex -> graph.getVertexOrder(vertex) % 2 != 0)
-                .collect(Collectors.toList());
+        List<Integer> oddVertices = getOddVertices(eulerianGraph);
 
-        Map<Edge, Integer> possibleVariantsWeights = new HashMap<>();
-
-        for (int i = 0; i < oddVertices.size(); i++) {
-            for (int j = i; j < oddVertices.size(); j++) {
-//                possibleVariantsWeights.put(new Edge(oddVertices.get(i), oddVertices.get(j), ))
+        List<Path> possibleVariantsWeights = new ArrayList<>();
+        int oddVerticesAmount = oddVertices.size();
+        int srcVertex;
+        int destVertex;
+        //find all pairs
+        for (int i = 0; i < oddVerticesAmount; i++) {
+            srcVertex = eulerianGraph.getVertices().get(i);
+            for (int j = i; j < oddVerticesAmount; j++) {
+                destVertex = eulerianGraph.getVertices().get(j);
+                possibleVariantsWeights.add(findMinimumWeightPath(srcVertex, destVertex, eulerianGraph));
             }
         }
+
+        int[] sums = new int[oddVerticesAmount / 2];
+
+        //merge pairs sum
+        int minSum = possibleVariantsWeights.get(0).getWeight() + possibleVariantsWeights.get(oddVerticesAmount - 0).getWeight();
+        int index = 0;
+        for (int i = 1; i < oddVerticesAmount / 2; i++) {
+//            possibleVariantsWeights.get(i).getEdges().addAll(possibleVariantsWeights.get(oddVerticesAmount - i).getEdges());
+//            possibleVariantsWeights.get(i).setWeight(possibleVariantsWeights.get(i).getWeight() + possibleVariantsWeights.get(oddVerticesAmount - i).getWeight());
+//            possibleVariantsWeights.remove(possibleVariantsWeights.get(oddVerticesAmount - i));
+            sums[i] = possibleVariantsWeights.get(i).getWeight() + possibleVariantsWeights.get(oddVerticesAmount - i).getWeight();
+            if (sums[i] < minSum) {
+                minSum = sums[i];
+                index = i;
+            }
+        }
+
+        Arrays.stream(sums).min().getAsInt();
+
+        doubleAllEdgesInThePath(possibleVariantsWeights.get(index), eulerianGraph);
+        doubleAllEdgesInThePath(possibleVariantsWeights.get(possibleVariantsWeights.size() - index), eulerianGraph);
 
         return eulerianGraph;
     }
 
-    private static List<Edge> findMinimumWeightPath(int startVertex, int endVertex, Graph graph){
-        DijkstraImplementation.findMinimumPathBetween(startVertex, endVertex, graph);
-        return null;
+    private static void doubleAllEdgesInThePath(Path path, Graph graph) {
+        path.getEdges().forEach(edge -> {
+            graph.addEdge(edge);
+            graph.addEdge(new Edge(edge.getDestVertex(), edge.getSrcVertex(), edge.getWeight()));
+        });
+    }
+
+    private static List<Integer> getOddVertices(Graph graph) {
+        return graph.getVertices().stream()
+                .filter(vertex -> graph.getVertexOrder(vertex) % 2 != 0)
+                .collect(Collectors.toList());
+    }
+
+    private static Path findMinimumWeightPath(int startVertex, int endVertex, Graph graph) {
+        String path = DijkstraImplementation.findMinimumPathBetween(startVertex, endVertex, graph);
+        Map.Entry<List<Edge>, Integer> result = convertToMapEntry(path, graph);
+        return new Path(result.getValue(), path, result.getKey());
+    }
+
+    private static Map.Entry<List<Edge>, Integer> convertToMapEntry(String path, Graph graph) {
+        List<Edge> edges = new ArrayList<>();
+        Integer weight = 0;
+        Edge edge;
+        for (int i = 0; i < path.length() - 2; i++) {
+            edge = graph.getEdge(Integer.parseInt(path.substring(i, i + 1)), Integer.parseInt(path.substring(i + 1, i + 2)));
+            edges.add(edge);
+            weight += edge.getWeight();
+        }
+        return new AbstractMap.SimpleEntry<List<Edge>, Integer>(edges, weight);
     }
 
     private static String findPath(int startingVertex, Graph graph) {
-        Set<Edge> edges = graph.getEdges();
+        List<Edge> edges = graph.getEdges();
         Map<Integer, Integer> verticesOrder = graph.getVertexOrder();
         verticesOrder.put(startingVertex, verticesOrder.get(startingVertex) - 1);
 
@@ -97,9 +149,11 @@ public class PostmanAlgorithm {
         return path.toString();
     }
 
-    private static void removeEdge(Edge edgeToDelete, Set<Edge> edges) {
-        edges.removeIf(edge -> (edge.getSrcVertex() == edgeToDelete.getSrcVertex() && edge.getDestVertex() == edgeToDelete.getDestVertex()
-                || edge.getSrcVertex() == edgeToDelete.getDestVertex() && edge.getDestVertex() == edgeToDelete.getSrcVertex()));
+    private static void removeEdge(Edge edgeToDelete, List<Edge> edges) {
+//        edges.removeIf(edge -> (edge.getSrcVertex() == edgeToDelete.getSrcVertex() && edge.getDestVertex() == edgeToDelete.getDestVertex()
+//                || edge.getSrcVertex() == edgeToDelete.getDestVertex() && edge.getDestVertex() == edgeToDelete.getSrcVertex()));
+        edges.remove(edgeToDelete);
+//        edges.remove(new Edge(edgeToDelete))
     }
 
     private static int countGraphWeight(Graph graph) {

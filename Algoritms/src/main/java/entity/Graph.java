@@ -1,6 +1,6 @@
 package entity;
 
-import Utils.MatrixUtils;
+import utils.MatrixUtils;
 
 import java.util.*;
 

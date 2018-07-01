@@ -1,6 +1,6 @@
 //package AlgorithmImpl;
 //
-//import Utils.MatrixUtils;
+//import utils.MatrixUtils;
 //import entity.Component;
 //import entity.Edge;
 //import entity.Graph;
@@ -115,11 +115,11 @@
 //        System.out.println("Finding minimum weight edge for component: "  + component);
 //        Edge minEdge = edges.stream()
 //                .filter(edge -> {
-//                    int firstComponentVertex = component.getVertices().stream().findFirst().get();
+//                    int firstComponentVertex = component.getVertices().stream().findFirst().getIterative();
 //                    return edge.getSrcVertex() == firstComponentVertex || edge.getDestVertex() == firstComponentVertex;
 //                })
 //                .findFirst()
-//                .get();
+//                .getIterative();
 //        EdgeWeightComparator edgeWeightComparator = new EdgeWeightComparator();
 //        Edge tempEdge;
 //
@@ -138,7 +138,7 @@
 //                .filter(edge -> edge.getSrcVertex() == vertex || edge.getDestVertex() == vertex)
 //                .sorted(new EdgeWeightComparator())
 //                .findFirst()
-//                .get();
+//                .getIterative();
 //        return minEdge;
 //    }
 //

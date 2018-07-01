@@ -1,6 +1,6 @@
-package AlgorithmImpl;
+package implementation;
 
-import Utils.MatrixUtils;
+import utils.MatrixUtils;
 import entity.Edge;
 import entity.Graph;
 import entity.Path;
@@ -64,9 +64,9 @@ public class PostmanAlgorithm {
         int minSum = possibleVariantsWeights.get(0).getWeight() + possibleVariantsWeights.get(oddVerticesAmount - 0).getWeight();
         int index = 0;
         for (int i = 1; i < oddVerticesAmount / 2; i++) {
-//            possibleVariantsWeights.get(i).getEdges().addAll(possibleVariantsWeights.get(oddVerticesAmount - i).getEdges());
-//            possibleVariantsWeights.get(i).setWeight(possibleVariantsWeights.get(i).getWeight() + possibleVariantsWeights.get(oddVerticesAmount - i).getWeight());
-//            possibleVariantsWeights.remove(possibleVariantsWeights.get(oddVerticesAmount - i));
+//            possibleVariantsWeights.getIterative(i).getEdges().addAll(possibleVariantsWeights.getIterative(oddVerticesAmount - i).getEdges());
+//            possibleVariantsWeights.getIterative(i).setWeight(possibleVariantsWeights.getIterative(i).getWeight() + possibleVariantsWeights.getIterative(oddVerticesAmount - i).getWeight());
+//            possibleVariantsWeights.remove(possibleVariantsWeights.getIterative(oddVerticesAmount - i));
             sums[i] = possibleVariantsWeights.get(i).getWeight() + possibleVariantsWeights.get(oddVerticesAmount - i).getWeight();
             if (sums[i] < minSum) {
                 minSum = sums[i];

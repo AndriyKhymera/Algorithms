@@ -1,6 +1,6 @@
-package AlgorithmImpl;
+package implementation;
 
-import Utils.MatrixUtils;
+import utils.MatrixUtils;
 import entity.DijkstraLabel;
 import entity.Edge;
 import entity.Graph;

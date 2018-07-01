@@ -1,4 +1,4 @@
-package AlgorithmImpl;
+package implementation;
 
 
 import entity.DijkstraLabel;

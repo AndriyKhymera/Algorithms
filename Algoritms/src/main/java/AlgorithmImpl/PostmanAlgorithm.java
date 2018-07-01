@@ -5,7 +5,6 @@ import entity.Edge;
 import entity.Graph;
 import entity.Path;
 
-import java.io.CharArrayReader;
 import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -18,16 +17,18 @@ public class PostmanAlgorithm {
         try {
             weightMatrix = MatrixUtils
                     .readMatrixFromFile("/home/andrii/IdeaProjects/KryvyiLabs/Algoritms/data/lab2_matrix_Eulers");
+//                    .readMatrixFromFile("//home/andrii/IdeaProjects/KryvyiLabs/Algoritms/data/lab2_matrix_non_Eulers");
             graph = new Graph(weightMatrix);
             System.out.println(graph.toString());
-
+  
             Scanner scanner = new Scanner(System.in);
             int startVertex;
             System.out.println("Enter vertex to start: ");
+            boolean hasEulerianPath = hasEulerianPath(graph);
             startVertex = scanner.nextInt();
 
             String path;
-            if (!hasEulerianPath(graph)) {
+            if (!hasEulerianPath) {
                 Graph modifiedGraph = makeEulerian(graph);
                 path = findPath(startVertex, modifiedGraph);
             } else {
@@ -40,7 +41,7 @@ public class PostmanAlgorithm {
     }
 
     private static Graph makeEulerian(Graph graph) {
-        Graph eulerianGraph = new Graph(graph.getVertices(), graph.getEdges());
+        Graph eulerianGraph = new Graph(graph.getVertices(), graph.getEdges(), graph.getVertexOrder());
 
         List<Integer> oddVertices = getOddVertices(eulerianGraph);
 
@@ -50,9 +51,9 @@ public class PostmanAlgorithm {
         int destVertex;
         //find all pairs
         for (int i = 0; i < oddVerticesAmount; i++) {
-            srcVertex = eulerianGraph.getVertices().get(i);
-            for (int j = i; j < oddVerticesAmount; j++) {
-                destVertex = eulerianGraph.getVertices().get(j);
+            srcVertex = oddVertices.get(i);
+            for (int j = i + 1; j < oddVerticesAmount; j++) {
+                destVertex = oddVertices.get(j);
                 possibleVariantsWeights.add(findMinimumWeightPath(srcVertex, destVertex, eulerianGraph));
             }
         }
@@ -141,7 +142,7 @@ public class PostmanAlgorithm {
             verticesOrder.put(currentVertex, verticesOrder.get(currentVertex) - 1);
 
             System.out.println("removing edge: " + edge);
-            removeEdge(edge.get(), edges);
+            removeEdge(edge.get(), edges, graph);
             if (currentVertex == startingVertex) {
                 complete = true;
             }
@@ -149,10 +150,11 @@ public class PostmanAlgorithm {
         return path.toString();
     }
 
-    private static void removeEdge(Edge edgeToDelete, List<Edge> edges) {
+    private static void removeEdge(Edge edgeToDelete, List<Edge> edges, Graph graph) {
 //        edges.removeIf(edge -> (edge.getSrcVertex() == edgeToDelete.getSrcVertex() && edge.getDestVertex() == edgeToDelete.getDestVertex()
 //                || edge.getSrcVertex() == edgeToDelete.getDestVertex() && edge.getDestVertex() == edgeToDelete.getSrcVertex()));
         edges.remove(edgeToDelete);
+        edges.remove(graph.getEdge(edgeToDelete.getDestVertex(), edgeToDelete.getSrcVertex()));
 //        edges.remove(new Edge(edgeToDelete))
     }
 

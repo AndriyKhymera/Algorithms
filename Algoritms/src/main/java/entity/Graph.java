@@ -18,11 +18,11 @@ public class Graph {
         vertexOrder = new HashMap<>();
     }
 
-    public Graph(List<Integer> vertices, List<Edge> edges) {
+    public Graph(List<Integer> vertices, List<Edge> edges, Map<Integer, Integer> vertexOrder) {
         this.vertexAmount = vertices.size();
         this.vertices = vertices;
         this.edges = edges;
-        vertexOrder = new HashMap<>();
+        this.vertexOrder = vertexOrder;
     }
 
     public Graph(List<List<Integer>> weightMatrix) {
